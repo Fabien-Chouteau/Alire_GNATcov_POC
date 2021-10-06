@@ -1,0 +1,11 @@
+name = "gnatcov_poc"
+description = "Shiny new project"
+version = "0.0.0"
+
+authors = ["Fabien Chouteau"]
+maintainers = ["Fabien Chouteau <fabien.chouteau@gmail.com>"]
+maintainers-logins = ["Fabien-Chouteau"]
+
+executables = ["gnatcov_poc"]
+[[depends-on]]  # Added by alr
+gnatcov = "^21.0.0-1"  # Added by alr

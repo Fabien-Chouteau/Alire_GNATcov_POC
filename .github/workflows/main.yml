@@ -1,0 +1,34 @@
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        gnat_version: [^11]
+        gprbuild_version: [^21]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: alire-project/setup-alire@v1
+        with:
+          branch: "master"  
+          toolchain: gprbuild${{ matrix.gprbuild_version }} gnat_native${{ matrix.gnat_version }} --disable-assistant
+
+      - run: alr build
+
+      - run: alr exec -- gnatcov instrument -P gnatcov_poc.gpr --level=stmt --dump-trigger=atexit --projects gnatcov_poc.gpr --no-subprojects
+
+      - run: alr build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full
+
+      - run: ./bin/gnatcov_poc
+
+      - run: alr exec -- gnatcov coverage -P gnatcov_poc.gpr --level=stmt --annotate=xcov gnatcov_poc.srctrace --output-dir gnatcov_out
+
+      - run: cat gnatcov_out/gnatcov_poc.adb.xcov
+
+      - run: cat gnatcov_out/gnatcov_poc.adb.xcov | sed 's/\([[:digit:]]\+\) +:/1: \1:/g; s/\([[:digit:]]\+\) -:/#####: \1:/g; s/\([[:digit:]]\+\) .:/-: \1:/g' > gnatcov_out/gnatcov_poc.adb.gcov
