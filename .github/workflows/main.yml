@@ -34,3 +34,11 @@ jobs:
 
       - run: |
           cat gnatcov_out/gnatcov_poc.adb.xcov | sed 's/\([[:digit:]]\+\) +:/1: \1:/g; s/\([[:digit:]]\+\) -:/#####: \1:/g; s/\([[:digit:]]\+\) .:/-: \1:/g' > gnatcov_out/gnatcov_poc.adb.gcov
+
+      - run: cat gnatcov_out/gnatcov_poc.adb.gcov
+      
+      - uses: codecov/codecov-action@v2
+        with:
+          files: gnatcov_out/gnatcov_poc.adb.gcov
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
