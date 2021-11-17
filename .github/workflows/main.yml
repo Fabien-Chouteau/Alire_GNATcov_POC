@@ -17,22 +17,18 @@ jobs:
       - uses: ada-actions/toolchain@ce2020
       - uses: alire-project/setup-alire@v1
         with:
-          branch: "master"
+          branch: "gnatcov"
           toolchain: gprbuild${{ matrix.gprbuild_version }} gnat_native${{ matrix.gnat_version }} --disable-assistant
 
       - run: alr build
 
-      - run: alr config --set --global alias.instrument "exec -- gnatcov instrument -P gnatcov_poc.gpr"
-      - run: alr config --set --global alias.build_cov "build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full"
-      - run: alr config --set --global alias.coverage "exec -- gnatcov coverage -P gnatcov_poc.gpr"
+      - run: alr coverage --instrument
 
-      - run: alr instrument
-
-      - run: alr build_cov
+      - run: alr build --cov-instr
 
       - run: ./bin/gnatcov_poc
 
-      - run: alr coverage gnatcov_poc.srctrace
+      - run: alr coverage --report *.srctrace
 
       - run: cat gnatcov_out/gnatcov_poc.adb.xcov
 
