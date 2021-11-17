@@ -22,13 +22,17 @@ jobs:
 
       - run: alr build
 
-      - run: alr exec -- gnatcov instrument -P gnatcov_poc.gpr --level=stmt+decision --dump-trigger=atexit --projects gnatcov_poc.gpr --no-subprojects
+      - run: alr config --set --global alias.instrument "exec -- gnatcov instrument -P gnatcov_poc.gpr"
+      - run: alr config --set --global alias.build_cov "build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full"
+      - run: alr config --set --global alias.coverage "exec -- gnatcov coverage -P gnatcov_poc.gpr"
 
-      - run: alr build -- --src-subdirs=gnatcov-instr --implicit-with=gnatcov_rts_full
+      - run: alr instrument
+
+      - run: alr build_cov
 
       - run: ./bin/gnatcov_poc
 
-      - run: alr exec -- gnatcov coverage -P gnatcov_poc.gpr --level=stmt+decision --annotate=xcov gnatcov_poc.srctrace --output-dir gnatcov_out
+      - run: alr coverage gnatcov_poc.srctrace
 
       - run: cat gnatcov_out/gnatcov_poc.adb.xcov
 

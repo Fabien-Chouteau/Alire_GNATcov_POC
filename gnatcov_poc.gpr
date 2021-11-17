@@ -78,4 +78,12 @@ project Gnatcov_Poc is
       for Switches ("Ada") use ("-Es"); --  Symbolic traceback
    end Binder;
 
+   package Coverage is
+      Cov_Level := ("--level=stmt+decision");
+      for Switches ("instrument") use ("--dump-trigger=atexit") & Cov_Level;
+      for Switches ("coverage") use ("--annotate=xcov",
+                                     "--output-dir", "gnatcov_out") &
+                                     Cov_Level;
+   end Coverage;
+
 end Gnatcov_Poc;
