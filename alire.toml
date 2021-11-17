@@ -8,4 +8,4 @@ maintainers-logins = ["Fabien-Chouteau"]
 
 executables = ["gnatcov_poc"]
 [[depends-on]]  # Added by alr
-gnatcov = "^21.0.0-1"  # Added by alr
+gnatcov = "^21.0.2"  # Added by alr
