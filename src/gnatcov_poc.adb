@@ -16,6 +16,9 @@ procedure Gnatcov_Poc is
       end if;
    end B;
 
+
+
+
    function C(X : Integer) return Integer is
    begin
       if (X mod 2) = 1 then
@@ -24,7 +27,10 @@ procedure Gnatcov_Poc is
          return X * 2;
       end if;
    end C;
+
 begin
+
+
    Ada.Text_IO.Put_Line (B (1)'Img);
    Ada.Text_IO.Put_Line (C (A)'Img);
 end Gnatcov_Poc;
